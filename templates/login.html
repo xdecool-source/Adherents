@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>TT Thuir - Adhérents</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Helvetica Neue",
+                Arial,
+                sans-serif;
+            color: #1c1c1e;
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(0, 122, 255, 0.14),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 85% 90%,
+                    rgba(88, 86, 214, 0.12),
+                    transparent 35%
+                ),
+                #f2f2f7;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .data-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 9px;
+        }
+        .data-header .section-label {
+            margin: 0;
+        }
+        .logout-button {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: none;
+            border-radius: 10px;
+            background: #f2f2f7;
+            color: #ff3b30;
+            font-family: inherit;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background: #ffe5e3;
+        }
+        /* =====================================================
+           CARTE LOGIN
+           ===================================================== */
+        .card {
+            width: 100%;
+            padding: 32px 26px;
+            border-radius: 28px;
+            background:
+                rgba(255, 255, 255, 0.92);
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.8);
+            backdrop-filter:
+                blur(20px);
+            -webkit-backdrop-filter:
+                blur(20px);
+            box-shadow:
+                0 20px 50px
+                rgba(0, 0, 0, 0.10);
+        }
+        /* =====================================================
+           LOGO
+           ===================================================== */
+        .logo {
+            width: 68px;
+            height: 68px;
+            margin:
+                0 auto 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            background:
+                linear-gradient(
+                    145deg,
+                    #007aff,
+                    #5856d6
+                );
+            color: white;
+            font-size: 25px;
+            font-weight: 700;
+            box-shadow:
+                0 10px 22px
+                rgba(0, 122, 255, 0.25);
+        }
+        h1 {
+            margin: 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.7px;
+        }
+        .subtitle {
+            margin:
+                9px 0 28px;
+            text-align: center;
+            color: #8e8e93;
+            font-size: 15px;
+        }
+        /* =====================================================
+           CHAMPS
+           ===================================================== */
+        .field {
+            margin-bottom: 14px;
+        }
+        .field input {
+            width: 100%;
+            height: 54px;
+            padding:
+                0 16px;
+            border:
+                1px solid #d1d1d6;
+            border-radius: 15px;
+            background: #f8f8fa;
+            color: #1c1c1e;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+        }
+        .field input:focus {
+            background: white;
+            border-color: #007aff;
+            box-shadow:
+                0 0 0 4px
+                rgba(0, 122, 255, 0.12);
+        }
+        /* =====================================================
+           BOUTON CONNEXION
+           ===================================================== */
+        .login-button {
+            width: 100%;
+            height: 54px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 15px;
+            background: #007aff;
+            color: white;
+            font-family: inherit;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow:
+                0 8px 18px
+                rgba(0, 122, 255, 0.22);
+            transition:
+                transform 0.12s,
+                background 0.2s;
+        }
+        .login-button:hover {
+            background: #006ee6;
+        }
+        .login-button:active {
+            transform:
+                scale(0.98);
+        }
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+        /* =====================================================
+           ERREUR
+           ===================================================== */
+        .error {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 13px;
+            background: #fff1f0;
+            color: #ff3b30;
+            text-align: center;
+            font-size: 14px;
+        }
+        /* =====================================================
+           ESPACE DONNÉES
+           ===================================================== */
+        #dataSection {
+            display: none;
+            margin-top: 22px;
+            padding-top: 26px;
+            border-top:
+                1px solid #e5e5ea;
+        }
+        .section-label {
+            margin-bottom: 9px;
+            padding-left: 4px;
+            color: #8e8e93;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+        .data-card {
+            padding: 21px;
+            border-radius: 20px;
+            background: #f8f8fa;
+            border:
+                1px solid
+                rgba(0, 0, 0, 0.03);
+        }
+        .data-card h2 {
+            margin:
+                0 0 8px;
+            font-size: 20px;
+            font-weight: 650;
+            letter-spacing: -0.3px;
+        }
+        .data-card p {
+            margin:
+                0 0 19px;
+            color: #8e8e93;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        /* =====================================================
+           BOUTON EXCEL
+           ===================================================== */
+        .export-button {
+            width: 100%;
+            height: 54px;
+            border: none;
+            border-radius: 15px;
+            background: #30c054;
+            color: white;
+            font-family: inherit;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow:
+                0 8px 18px
+                rgba(48, 192, 84, 0.22);
+            transition:
+                transform 0.12s,
+                background 0.2s;
+        }
+        .export-button:hover {
+            background: #28ad4a;
+        }
+        .export-button:active {
+            transform:
+                scale(0.98);
+        }
+        .export-button:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+        /* =====================================================
+           MESSAGE EXPORT
+           ===================================================== */
+        .export-status {
+            display: none;
+            margin-top: 14px;
+            padding: 10px;
+            border-radius: 12px;
+            background: #e9f9ee;
+            color: #248a3d;
+            font-size: 13px;
+            text-align: center;
+        }
+        /* =====================================================
+           UTILISATEUR CONNECTÉ
+           ===================================================== */
+        .connected-user {
+            display: none;
+            margin-top: 15px;
+            text-align: center;
+            color: #34c759;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #8e8e93;
+            font-size: 12px;
+        }
+        /* =====================================================
+           MODE SOMBRE
+           ===================================================== */
+        @media (prefers-color-scheme: dark) {
+            body {
+                color: #f2f2f7;
+                background:
+                    radial-gradient(
+                        circle at 15% 10%,
+                        rgba(10, 132, 255, 0.18),
+                        transparent 35%
+                    ),
+                    #000000;
+            }
+            .card {
+                background:
+                    rgba(28, 28, 30, 0.90);
+                border-color:
+                    rgba(255, 255, 255, 0.08);
+            }
+            .field input {
+                background: #2c2c2e;
+                border-color: #48484a;
+                color: #f2f2f7;
+            }
+            .field input:focus {
+                background: #3a3a3c;
+                border-color: #0a84ff;
+            }
+            #dataSection {
+                border-color:
+                    #38383a;
+            }
+            .data-card {
+                background: #2c2c2e;
+                border-color:
+                    rgba(255, 255, 255, 0.06);
+            }
+            .section-label,
+            .data-card p,
+            .footer {
+                color: #98989d;
+            }
+            .export-button {
+                background: #30d158;
+            }
+        }
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+        @media (max-width: 480px) {
+            body {
+                padding:
+                    20px 15px;
+            }
+            .card {
+                padding:
+                    28px 22px;
+            }
+            h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <!-- =================================================
+             LOGIN
+             ================================================= -->
+        <div id="loginSection">
+            <h1>
+                Tennis de Table Thuirinois
+            </h1>
+            <p class="subtitle">
+                Connectez-vous à votre espace
+            </p>
+            <div
+                id="error"
+                class="error"
+            ></div>
+            <form id="loginForm">
+                <div class="field">
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Identifiant"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+                <div class="field">
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Mot de passe"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+                <button
+                    type="submit"
+                    id="loginButton"
+                    class="login-button"
+                >
+                    Se connecter
+                </button>
+            </form>
+            <div
+                id="connectedUser"
+                class="connected-user"
+            ></div>
+        </div>
+        <!-- =================================================
+             DONNÉES
+             CE BLOC S'AJOUTE SOUS LE LOGIN
+             ================================================= -->
+        <div id="dataSection">
+            <div class="data-header">
+            <div class="section-label">
+                Données
+            </div>
+            <form method="post" action="/logout">
+                <button
+                    type="submit"
+                    class="logout-button"
+                    title="Se déconnecter"
+                >
+                    ↪
+                </button>
+            </form>
+        </div>
+            <div class="data-card">
+                <h2>
+                    Liste des licenciés
+                </h2>
+                <p>
+                    Récupérez le N° licence	Nom	Prénom Type licence 
+                    Catégorie Points Validation Mutation
+                </p>
+                <button
+                    type="button"
+                    id="exportButton"
+                    class="export-button"
+                >
+                    Exporter vers Excel
+                </button>
+                <div
+                    id="exportStatus"
+                    class="export-status"
+                ></div>
+            </div>
+        </div>
+        <div class="footer">
+            TT Thuir · Espace adhérents
+        </div>
+    </div>
+</div>
+<script>
+    /* =====================================================
+       ÉLÉMENTS
+       ===================================================== */
+    const loginForm =
+        document.getElementById(
+            "loginForm"
+        );
+    const loginButton =
+        document.getElementById(
+            "loginButton"
+        );
+    const error =
+        document.getElementById(
+            "error"
+        );
+    const dataSection =
+        document.getElementById(
+            "dataSection"
+        );
+    const connectedUser =
+        document.getElementById(
+            "connectedUser"
+        );
+    const exportButton =
+        document.getElementById(
+            "exportButton"
+        );
+    const exportStatus =
+        document.getElementById(
+            "exportStatus"
+        );
+    /* =====================================================
+       AFFICHER LE BLOC DONNÉES
+       ===================================================== */
+    function showDataSection(username) {
+        /*
+         * IMPORTANT :
+         *
+         * On ne masque PAS le login.
+         *
+         * On ajoute simplement la partie
+         * "Données" en dessous.
+         */
+        dataSection.style.display =
+            "block";
+        connectedUser.textContent =
+            "✓ Connecté : " + username;
+        connectedUser.style.display =
+            "block";
+    }
+    /* =====================================================
+       VÉRIFIER LA SESSION
+       ===================================================== */
+    async function checkSession() {
+        try {
+            const response =
+                await fetch(
+                    "/status"
+                );
+            if (!response.ok) {
+                return;
+            }
+            const data =
+                await response.json();
+            if (data.authenticated) {
+                showDataSection(
+                    data.user
+                );
+            }
+        } catch (e) {
+            console.error(
+                "Erreur session :",
+                e
+            );
+        }
+    }
+    /* =====================================================
+       CONNEXION
+       ===================================================== */
+    loginForm.addEventListener(
+        "submit",
+        async function(event) {
+            /*
+             * Empêche le changement de page.
+             */
+            event.preventDefault();
+            error.style.display =
+                "none";
+            loginButton.disabled =
+                true;
+            loginButton.textContent =
+                "Connexion...";
+            const formData =
+                new FormData(
+                    loginForm
+                );
+            try {
+                const response =
+                    await fetch(
+                        "/login",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+                const data =
+                    await response.json();
+                if (
+                    response.ok &&
+                    data.success
+                ) {
+                    /*
+                     * NE PAS cacher le login.
+                     *
+                     * On ajoute simplement
+                     * la section Excel.
+                     */
+                    showDataSection(
+                        data.user
+                    );
+                } else {
+                    error.textContent =
+                        data.error ||
+                        "Identifiant ou mot de passe incorrect.";
+                    error.style.display =
+                        "block";
+                }
+            } catch (e) {
+                console.error(e);
+                error.textContent =
+                    "Impossible de contacter le serveur.";
+                error.style.display =
+                    "block";
+            }
+            loginButton.disabled =
+                false;
+            loginButton.textContent =
+                "Se connecter";
+        }
+    );
+    /* =====================================================
+       EXPORT EXCEL
+       ===================================================== */
+    exportButton.addEventListener(
+        "click",
+        async function() {
+            exportButton.disabled =
+                true;
+            exportButton.textContent =
+                "Préparation du fichier...";
+            exportStatus.style.display =
+                "none";
+            try {
+                const response =
+                    await fetch(
+                        "/export",
+                        {
+                            method: "POST"
+                        }
+                    );
+                if (!response.ok) {
+                    throw new Error(
+                        "Erreur lors de l'export."
+                    );
+                }
+                const blob =
+                    await response.blob();
+                const disposition =
+                    response.headers.get(
+                        "Content-Disposition"
+                    );
+                let filename =
+                    "licencies.xlsx";
+                if (disposition) {
+                    const match =
+                        disposition.match(
+                            /filename="?([^"]+)"?/i
+                        );
+                    if (match) {
+                        filename =
+                            match[1];
+                    }
+                }
+                const url =
+                    window.URL.createObjectURL(
+                        blob
+                    );
+                const link =
+                    document.createElement(
+                        "a"
+                    );
+                link.href =
+                    url;
+                link.download =
+                    filename;
+                document.body.appendChild(
+                    link
+                );
+                link.click();
+                link.remove();
+                window.URL.revokeObjectURL(
+                    url
+                );
+                exportStatus.textContent =
+                    "✓ Fichier Excel téléchargé";
+                exportStatus.style.display =
+                    "block";
+            } catch (e) {
+                console.error(e);
+                exportStatus.textContent =
+                    e.message ||
+                    "Erreur lors de l'export.";
+                exportStatus.style.display =
+                    "block";
+            }
+            exportButton.disabled =
+                false;
+            exportButton.textContent =
+                "Exporter vers Excel";
+        }
+    );
+    /* =====================================================
+       INITIALISATION
+       ===================================================== */
+    checkSession();
+</script>
+</body>
+</html>

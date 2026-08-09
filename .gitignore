@@ -1,0 +1,8 @@
+*.pyc
+.env
+README.md
+serie.txt
+Procfile
+A_Info/
+__pycache__/
+venv/
