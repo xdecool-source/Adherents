@@ -5,3 +5,4 @@ uvicorn
 gunicorn
 jinja2
 itsdangerous
+werkzeug
