@@ -2,3 +2,5 @@ openpyxl
 python-dotenv
 fastapi
 uvicorn
+gunicorn
+jinja2
