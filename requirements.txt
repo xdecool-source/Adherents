@@ -4,3 +4,4 @@ fastapi
 uvicorn
 gunicorn
 jinja2
+itsdangerous
