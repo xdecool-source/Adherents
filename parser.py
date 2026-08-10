@@ -19,6 +19,7 @@ class Joueur:
     nom: str = ""
     prenom: str = ""
     club: str = ""
+    certif: str = ""
     type: str = ""
     categorie: str = ""
     points: float = 0.0
@@ -42,6 +43,7 @@ def parse_liste(xml):
                 nom=j.findtext("nom", ""),
                 prenom=j.findtext("prenom", ""),
                 club=j.findtext("nomclub", ""),
+                certif=j.findtext("certif", ""),
                 type=j.findtext("type", ""),
                 categorie=j.findtext("cat", ""),
                 points=points,

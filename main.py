@@ -15,11 +15,11 @@ from fftt_api import appel
 from parser import parse_liste, filtre_saison, trier_points
 from excel import export_excel
 
-# ENVIRONNEMENT
+# environnement
 
 load_dotenv()
 
-# FASTAPI
+# fastapi
 
 app = FastAPI()
 
@@ -38,17 +38,18 @@ print("")
 print(" 🟢 Gestion : Export Adhérents de Spid : Startup")
 print("")
 
-# IDENTIFIANTS
+# identifiants
 
 APP_USER = os.getenv("APP_USER","")
 APP_PASSWORD_HASH = os.getenv("APP_PASSWORD_HASH","")
+FFTT_CLUB = os.getenv("FFTT_CLUB","")
 
-# AUTHENTIFICATION
+# authentification
 
 def authenticated(request: Request):
     return request.session.get("authenticated") is True
 
-# PAGE UNIQUE
+# page unique
 
 @app.get("/", response_class=HTMLResponse)
 
@@ -102,7 +103,7 @@ async def status(request: Request):
         "user": ""
     }
 
-# EXPORT EXCEL
+# export excel
 
 @app.post("/export")
 
@@ -158,7 +159,7 @@ async def export(request: Request):
         }
     )
 
-# DÉCONNEXION SANS CHANGEMENT DE PAGE
+# déconnexion sans changement de page
 
 @app.post("/logout")
 
@@ -169,11 +170,11 @@ async def logout(request: Request):
         status_code=303
     )
 
-# HEALTH
+# increment
 
-@app.get("/health")
+@app.get("/increment")
 
-async def health():
+async def increment():
     return {
         "status": "OK"
     }
