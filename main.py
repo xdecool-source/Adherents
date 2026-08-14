@@ -13,7 +13,10 @@ from starlette.middleware.sessions import SessionMiddleware
 from werkzeug.security import check_password_hash
 from fftt_api import appel
 from parser import parse_liste, filtre_saison, trier_points
-from excel import export_excel
+from excel import export_excel, export_neon
+
+from database import engine
+from models import Base
 
 # environnement
 
@@ -28,14 +31,18 @@ app.add_middleware(
     secret_key=os.getenv(
         "FLASK_SECRET_KEY",
         "change-me-in-railway"
-    )
+    ),
+    max_age=300,  # session valable maximum 5 minutes
+    same_site="lax",
+    # https_only=True
 )
+
 templates = Jinja2Templates(
     directory="templates"
 )
 
 print("")
-print(" 🟢 Gestion : Export Adhérents de Spid : Startup")
+print(" 🟢 Export joueurs de Spid et chargement des joueurs dans Néon  : Startup")
 print("")
 
 # identifiants
@@ -43,6 +50,10 @@ print("")
 APP_USER = os.getenv("APP_USER","")
 APP_PASSWORD_HASH = os.getenv("APP_PASSWORD_HASH","")
 FFTT_CLUB = os.getenv("FFTT_CLUB","")
+
+# création database 
+
+Base.metadata.create_all(bind=engine)
 
 # authentification
 
@@ -103,50 +114,80 @@ async def status(request: Request):
         "user": ""
     }
 
-# export excel
-
 @app.post("/export")
-
 async def export(request: Request):
     if not authenticated(request):
         return JSONResponse(
-            {
-                "error": "Non authentifié"
-            },
+            {"error": "Non authentifié"},
             status_code=401
         )
-    club = os.getenv("FFTT_CLUB","11660007")
-    xml = appel("xml_licence_b.php", club=club)
-    joueurs = trier_points(filtre_saison( parse_liste(xml)))
+
+    club = os.getenv("FFTT_CLUB", "11660007")
+
+    # Récupération des licenciés FFTT
+    xml = appel(
+        "xml_licence_b.php",
+        club=club
+    )
+
+    # Transformation et filtrage
+    # récupère et prépare les joueurs FFTT. Ton parser.py 
+    # confirme bien que parse_liste() produit les objets Joueur avec les champs utilisés 
+    # par l'export.
+    
+     
+    joueurs = trier_points(
+        filtre_saison(
+            parse_liste(xml)
+        )
+    )
+
+    # ==========================
+    # EXPORT NEON
+    # ==========================
+
+    nombre = export_neon(joueurs)
+
+    print(
+        f"{nombre} joueurs exportés vers Neon"
+    )
+
+    # ==========================
+    # EXPORT EXCEL
+    # ==========================
+
     with tempfile.NamedTemporaryFile(
         suffix=".xlsx",
         delete=False
     ) as tmp:
         temp_path = tmp.name
-        
+
     try:
         export_excel(
             joueurs,
             temp_path
         )
+
         with open(
             temp_path,
             "rb"
         ) as f:
             data = f.read()
-            
+
     finally:
         try:
-            
             os.remove(temp_path)
         except OSError:
             pass
+
     today = date.today().strftime(
         "%Y-%m-%d"
     )
+
     filename = (
         f"licencies_{club}_{today}.xlsx"
     )
+
     return Response(
         content=data,
         media_type=(
@@ -158,17 +199,15 @@ async def export(request: Request):
                 f'attachment; filename="{filename}"'
         }
     )
+    
 
 # déconnexion sans changement de page
 
 @app.post("/logout")
-
 async def logout(request: Request):
     request.session.clear()
-    return RedirectResponse(
-        url="/",
-        status_code=303
-    )
+
+    return Response(status_code=204)
 
 # increment
 

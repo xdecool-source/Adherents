@@ -6,3 +6,5 @@ Procfile
 A_Info/
 __pycache__/
 venv/
+DB/
+

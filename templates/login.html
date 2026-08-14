@@ -438,9 +438,9 @@
              ================================================= -->
         <div id="dataSection">
             <div class="data-header">
-            <div class="section-label">
-                Données
-            </div>
+            <div class="section-label" style="text-transform: none !important;">
+                Déconnexion
+            </div>           
             <form method="post" action="/logout">
                 <button
                     type="submit"
@@ -453,18 +453,18 @@
         </div>
             <div class="data-card">
                 <h2>
-                    Liste des licenciés
+                    Liste des licenciés validés
                 </h2>
                 <p>
-                    Récupérez le N° licence	Nom	Prénom Type licence 
-                    Catégorie Points Validation Mutation
+                    N° licence,Nom,Prénom,Type certificat,
+                    type licence,Points,Date Validation, Date Mutation
                 </p>
                 <button
                     type="button"
                     id="exportButton"
                     class="export-button"
                 >
-                    Exporter vers Excel
+                    Création Excel et en Base Neon
                 </button>
                 <div
                     id="exportStatus"
@@ -473,7 +473,7 @@
             </div>
         </div>
         <div class="footer">
-            TT Thuir · Espace adhérents
+            TT Thuir · Espace adhérents XDC version 1.5
         </div>
     </div>
 </div>
@@ -703,6 +703,14 @@
        INITIALISATION
        ===================================================== */
     checkSession();
+
 </script>
+
+<script>
+window.addEventListener("pagehide", function () {
+    navigator.sendBeacon("/logout");
+});
+</script>
+
 </body>
 </html>
