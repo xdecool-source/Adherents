@@ -204,10 +204,12 @@ async def export(request: Request):
 # déconnexion sans changement de page
 
 @app.post("/logout")
-async def logout(request: Request):
+def logout(request: Request):
     request.session.clear()
-
-    return Response(status_code=204)
+    return RedirectResponse(
+        url="/",
+        status_code=303
+    )
 
 # increment
 
