@@ -8,4 +8,5 @@ itsdangerous
 werkzeug
 python-multipart
 sqlalchemy
+psycopg2-binary
 
