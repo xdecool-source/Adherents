@@ -142,9 +142,7 @@ async def export(request: Request):
         )
     )
 
-    # ==========================
-    # EXPORT NEON
-    # ==========================
+    # export neon
 
     nombre = export_neon(joueurs)
 
@@ -152,9 +150,7 @@ async def export(request: Request):
         f"{nombre} joueurs exportés vers Neon"
     )
 
-    # ==========================
-    # EXPORT EXCEL
-    # ==========================
+    # export excel
 
     with tempfile.NamedTemporaryFile(
         suffix=".xlsx",

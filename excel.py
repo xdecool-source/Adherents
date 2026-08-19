@@ -5,7 +5,6 @@ from sqlalchemy.dialects.postgresql import insert
 from database import SessionLocal
 from models import Player
 
-
 def export_excel(joueurs, fichier):
     wb = Workbook()
     ws = wb.active
@@ -119,4 +118,4 @@ def export_neon(joueurs):
     finally:
         session.close()
         
-        
+    

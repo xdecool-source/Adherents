@@ -19,7 +19,6 @@ def generer_serie():
     chars = string.ascii_uppercase + string.digits
     return "".join(random.choice(chars) for _ in range(15))
 
-
 def charger_serie():
     
     serie_env = os.environ.get("FFTT_SERIE")
