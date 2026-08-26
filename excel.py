@@ -22,6 +22,20 @@ def export_excel(joueurs, fichier):
         "Mutation",
     ]
 
+    type_licence = [
+        "A = Dirigeant",
+        "T = Compétition",
+        "L = Loisir",
+    ]
+
+    certificat = [
+        "P = Parcours Prévention Santé",
+        "N = Sans Pratique Sportive",
+        "S = Standard",
+        "A = Attestation Autoquestionnaire Pour Mineure",
+    ]
+
+    # En-têtes principaux A à I
     for col, titre in enumerate(entete, start=1):
         cell = ws.cell(row=1, column=col)
         cell.value = titre
@@ -31,6 +45,29 @@ def export_excel(joueurs, fichier):
             fgColor="D9EAD3"
         )
 
+    # Explications en colonne K : Type de licence
+    ws["K1"] = "Type de licence"
+    ws["K1"].font = Font(bold=True)
+    ws["K1"].fill = PatternFill(
+        fill_type="solid",
+        fgColor="D9EAD3"
+    )
+
+    for i, explication in enumerate(type_licence, start=2):
+        ws.cell(row=i, column=11).value = explication
+
+    # Explications en colonne L : Certificat médical
+    ws["L1"] = "Type certificat médical"
+    ws["L1"].font = Font(bold=True)
+    ws["L1"].fill = PatternFill(
+        fill_type="solid",
+        fgColor="D9EAD3"
+    )
+
+    for i, explication in enumerate(certificat, start=2):
+        ws.cell(row=i, column=12).value = explication
+
+    # Données des joueurs
     ligne = 2
 
     for j in joueurs:
@@ -46,6 +83,7 @@ def export_excel(joueurs, fichier):
 
         ligne += 1
 
+    # Ajustement automatique de la largeur des colonnes
     for colonne in ws.columns:
         longueur = max(
             len(str(cell.value)) if cell.value else 0
@@ -54,13 +92,12 @@ def export_excel(joueurs, fichier):
 
         ws.column_dimensions[
             colonne[0].column_letter
-        ].width = longueur + 8
+        ].width = longueur + 3
 
     ws.auto_filter.ref = ws.dimensions
     ws.freeze_panes = "A2"
 
     wb.save(fichier)
-
 
 def export_neon(joueurs):
     """
