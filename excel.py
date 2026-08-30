@@ -25,14 +25,14 @@ def export_excel(joueurs, fichier):
     type_licence = [
         "A = Dirigeant",
         "T = Compétition",
-        "L = Loisir",
+        "P = Loisir",
     ]
 
     certificat = [
         "P = Parcours Prévention Santé",
         "N = Sans Pratique Sportive",
         "S = Standard",
-        "A = Attestation Autoquestionnaire Pour Mineure",
+        "U = Attestation Autoquestionnaire Pour Mineure",
     ]
 
     # En-têtes principaux A à I
