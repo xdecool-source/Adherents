@@ -31,7 +31,7 @@ def export_excel(joueurs, fichier):
     certificat = [
         "P = Parcours Prévention Santé",
         "N = Sans Pratique Sportive",
-        "S = Standard",
+        "C = Standard Certificat Médical"
         "U = Attestation Autoquestionnaire Pour Mineure",
     ]
 
